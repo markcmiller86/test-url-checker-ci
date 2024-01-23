@@ -57,7 +57,8 @@ jobs:
         exclude_patterns: http://localhost:4000,https://preview.bssw.io,https://github.com/<your-github-handle>
 
         # Operate only on the specific list of files selected above
-        include_files: "${{ steps.file_list.outputs.files }}"
+        #include_files: "${{ steps.file_list.outputs.files }}"
+        include_files: ".src/foo.md"
 
 # Description:
 # 5:17 AM every Sunday
