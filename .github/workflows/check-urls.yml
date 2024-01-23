@@ -3,8 +3,7 @@ name: Check URLs
 on:
   workflow_dispatch:  # Allows manual triggering
   schedule:
-    #- cron: '17 5 * * 0' # 5:17 AM every Sunday
-    - cron: '*/5 * * * *' # Every 5 mins on Mondays
+    - cron: '17 5 * * 0' # 5:17 AM every Sunday
   pull_request:
     branches: [ main ]
 
@@ -35,7 +34,7 @@ jobs:
         if [ "${{ github.event_name }}" = "pull_request" ]; then
           echo "::set-output name=files::${{ steps.changed-files.outputs.all_changed_files }}"
         else
-          echo "::set-output name=files::$(find . -name .github -prune -false -o -name utils -prune -false -o -name docs -prune -false -o -name '*.md' | tr '\n' ',')"
+          echo "::set-output name=files::$(find . -name .git -prune -false -o -name .github -prune -false -o -name utils -prune -false -o -name docs -prune -false -o -name '*.md' | tr '\n' ',')"
         fi
 
     - name: Check URLs in selected files
