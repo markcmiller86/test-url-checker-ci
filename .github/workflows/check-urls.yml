@@ -29,7 +29,7 @@ jobs:
           **/docs/**
 
     - name: Generate list of selected files to URL check 
-      id: file-list
+      id: file_list
       run: |
         if [ "${{ github.event_name }}" = "pull_request" ]; then
           echo "::set-output name=files::${{ steps.changed-files.outputs.all_changed_files }}"
@@ -57,7 +57,7 @@ jobs:
         exclude_patterns: http://localhost:4000,https://preview.bssw.io,https://github.com/<your-github-handle>
 
         # Operate only on the specific list of files selected above
-        include_files: "${{ steps.file-list.outputs.files }}"
+        include_files: "${{ steps.file_list.outputs.files }}"
 
 # Description:
 # 5:17 AM every Sunday
