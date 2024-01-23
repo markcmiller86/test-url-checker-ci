@@ -4,7 +4,7 @@ on:
   workflow_dispatch:  # Allows manual triggering
   schedule:
     #- cron: '17 5 * * 0' # 5:17 AM every Sunday
-    - cron: '*/5 * * * 1' # Every 5 mins on Mondays
+    - cron: '*/5 * * * *' # Every 5 mins on Mondays
   pull_request:
     branches: [ main ]
 
