@@ -20,6 +20,7 @@ jobs:
       id: changed-files
       uses: tj-actions/changed-files@v42
       with:
+        separator: ','
         files: '**.md'
         files_ignore: |
           docs/_config.yml
@@ -33,7 +34,7 @@ jobs:
         if [ "${{ github.event_name }}" = "pull_request" ]; then
           echo "::set-output name=files::${{ steps.changed-files.outputs.all_changed_files }}"
         else
-          echo "::set-output name=files::$(find . -name .github -prune -false -o -name utils -prune -false -o -name docs -prune -false -name '*.md')"
+          echo "::set-output name=files::$(find . -name .github -prune -false -o -name utils -prune -false -o -name docs -prune -false -name '*.md' | tr '\n' ',')"
         fi
 
     - name: Check URLs in selected files
