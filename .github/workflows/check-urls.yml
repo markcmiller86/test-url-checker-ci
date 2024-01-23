@@ -41,6 +41,9 @@ jobs:
       uses: urlstechie/urlchecker-action@0.0.34
       with:
 
+        # Work only on markdown files
+        file_types: .md
+
         # Choose whether to include file with no URLs in the prints.
         print_all: false
 
