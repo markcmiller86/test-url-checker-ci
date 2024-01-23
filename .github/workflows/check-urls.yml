@@ -1,0 +1,66 @@
+name: Check URLs
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+  schedule:
+    - cron: '17 5 * * 0' # 5:17 AM every Sunday
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-urls:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Get Changed Files (for PRs)
+      if: ${{ github.event_name == 'pull_request' }}
+      id: changed-files
+      uses: tj-actions/changed-files@v42
+      with:
+        files: '**.md'
+        files_ignore: |
+          docs/_config.yml
+          **/.github/**
+          **/utils/**
+          **/docs/**
+
+    - name: Generate list of selected files to URL check 
+      id: file-list
+      run: |
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "::set-output name=files::${{ steps.changed-files.outputs.all_changed_files }}"
+        else
+          echo "::set-output name=files::$(find . -name .github -prune -false -o -name utils -prune -false -o -name docs -prune -false -name '*.md')"
+        fi
+
+    - name: Check URLs in selected files
+      uses: urlstechie/urlchecker-action@0.0.34
+      with:
+
+        # A comma-separated list of file types to cover in the URL checks
+        file_types: .md
+
+        # Choose whether to include file with no URLs in the prints.
+        print_all: false
+
+        # More verbose summary at the end of a run
+        verbose: true
+
+        # How many times to retry a failed request (defaults to 1)
+        retry_count: 3
+
+        # Google Forms is having enormous timeouts
+        timeout: 10
+
+        # Exclude these patterns from the checker
+        exclude_patterns: http://localhost:4000,https://preview.bssw.io,https://github.com/<your-github-handle>
+
+        # Operate only on the specific list of files selected above
+        include_files: "${{ steps.file-list.outputs.files }}"
+
+# Description:
+# 5:17 AM every Sunday
+# Allow for manually running also.
