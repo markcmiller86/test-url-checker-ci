@@ -27,7 +27,7 @@ jobs:
       id: setup_vars
       run: |
         echo "ignore_patterns=$(echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
-        echo "ignore_dirs=$(echo ${{ env.ignore_dirs }} | xargs -n 1 -I'{}' echo \"**/{}/**\" | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
+#        echo "ignore_dirs=$(echo ${{ env.ignore_dirs }} | xargs -n 1 -I'{}' echo \"**/{}/**\" | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
       uses: actions/checkout@v3
@@ -38,8 +38,6 @@ jobs:
         echo "Got here 1"
         echo "${{ steps.setup_vars.outputs.ignore_patterns }}"
         echo "Got here 2"
-        echo "${{ steps.setup_vars.outputs.ignore_dirs }}"
-        echo "Got here 3"
 
     - name: Get Changed Files (for PRs)
       if: ${{ github.event_name == 'pull_request' }}
