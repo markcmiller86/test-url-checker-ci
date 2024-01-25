@@ -22,7 +22,7 @@ jobs:
 
     - name: Debugging Information
       id: debug
-      run: echo ${{ env.ignore_patterns }} | tr '\n' ','
+      run: echo "${{ env.ignore_patterns }}" | tr '\n' ','
 
     - name: Get Changed Files (for PRs)
       if: ${{ github.event_name == 'pull_request' }}
