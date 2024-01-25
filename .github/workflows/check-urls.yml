@@ -22,7 +22,7 @@ jobs:
 
     - name: Debugging Information
       id: debug
-      run: echo "ignore_patterns env. variable is ${{ env.ignore_patterns }}"
+      run: echo ${{ env.ignore_patterns }} | tr '\n' ','
 
     - name: Get Changed Files (for PRs)
       if: ${{ github.event_name == 'pull_request' }}
@@ -66,7 +66,8 @@ jobs:
         timeout: 10
 
         # Exclude these patterns from the checker
-        exclude_patterns: http://localhost:4000,https://preview.bssw.io,https://github.com/<your-github-handle>
+        exclude_patterns: ${{ env.ignore_patterns }}
+
 
         # Operate only on the specific list of files selected above
         include_files: "${{ steps.file_list.outputs.files }}"
