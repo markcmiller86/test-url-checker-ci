@@ -34,11 +34,11 @@ jobs:
     - name: Debugging Vars
       id: debug
       run: |
-	echo "Got here 1"
+        echo "Got here 1"
         echo "${{ steps.setup_vars.outputs.ignore_patterns }}"
-	echo "Got here 2"
+        echo "Got here 2"
         echo "${{ steps.setup_vars.outputs.ignore_dirs }}"
-	echo "Got here 3"
+        echo "Got here 3"
 
     - name: Get Changed Files (for PRs)
       if: ${{ github.event_name == 'pull_request' }}
