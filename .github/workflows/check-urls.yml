@@ -1,11 +1,16 @@
 name: Check URLs
 
 on:
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
   schedule:
     - cron: '17 5 * * 0' # 5:17 AM every Sunday
   pull_request:
     branches: [ main ]
+env:
+  ignore_patterns: |
+    http://localhost:4000
+    https://preview.bssw.io
+    https://github.com/<your-github-handle>
 
 jobs:
   check-urls:
@@ -14,6 +19,10 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
+
+    - name: Debugging Information
+      id: debug
+      run: echo "ignore_patterns env. variable is ${{ env.ignore_patterns }}"
 
     - name: Get Changed Files (for PRs)
       if: ${{ github.event_name == 'pull_request' }}
@@ -63,6 +72,10 @@ jobs:
         include_files: "${{ steps.file_list.outputs.files }}"
         #include_files: ".src/foo.md"
 
+#
 # Description:
-# 5:17 AM every Sunday
-# Allow for manually running also.
+#
+# Triggers in one of three ways; 1) manually, 2) scheduled weekly Sunday's 5:17 AM
+# or 3) pull request
+#
+#
