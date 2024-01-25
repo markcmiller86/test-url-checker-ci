@@ -11,18 +11,29 @@ env:
     http://localhost:4000
     https://preview.bssw.io
     https://github.com/<your-github-handle>
+  ignore_dirs: |
+      .github
+      utils
+      docs
+  ignore_files:
 
 jobs:
   check-urls:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Setup variables
+      id: setup_vars
+      run: echo "ignore_patterns=$(echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
+      run: echo "ignore_dirs=$(echo ${{ env.ignore_dirs}} | xargs -n 1 -I'{}' echo **/{}/**)" >> $GITHUB_OUTPUT
+
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Debugging Information
+    - name: Debugging Vars
       id: debug
-      run: echo "${{ env.ignore_patterns }}" | tr '\n' ','
+      run: echo "${{ steps.setup_vars.outputs.ignore_patterns }}"
+      run: echo "${{ steps.setup_vars.outputs.ignore_dirs }}"
 
     - name: Get Changed Files (for PRs)
       if: ${{ github.event_name == 'pull_request' }}
@@ -67,7 +78,6 @@ jobs:
 
         # Exclude these patterns from the checker
         exclude_patterns: ${{ env.ignore_patterns }}
-
 
         # Operate only on the specific list of files selected above
         include_files: "${{ steps.file_list.outputs.files }}"
