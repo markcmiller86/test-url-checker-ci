@@ -12,10 +12,11 @@ env:
     https://preview.bssw.io
     https://github.com/<your-github-handle>
   ignore_dirs: |
-      .github
-      utils
-      docs
-  ignore_files:
+    .github
+    utils
+    docs
+  ignore_files: |
+    foo
 
 jobs:
   check-urls:
@@ -26,7 +27,7 @@ jobs:
       id: setup_vars
       run: |
         echo "ignore_patterns=$(echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
-        echo "ignore_dirs=$(echo ${{ env.ignore_dirs}} | xargs -n 1 -I'{}' echo **/{}/**)" >> $GITHUB_OUTPUT
+        echo "ignore_dirs=$(echo ${{ env.ignore_dirs }} | xargs -n 1 -I'{}' echo \"**/{}/**\" | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
       uses: actions/checkout@v3
@@ -82,7 +83,7 @@ jobs:
         timeout: 10
 
         # Exclude these patterns from the checker
-        exclude_patterns: ${{ env.ignore_patterns }}
+        exclude_patterns: ${{ steps.setup_vars.outputs.ignore_patterns }}
 
         # Operate only on the specific list of files selected above
         include_files: "${{ steps.file_list.outputs.files }}"
