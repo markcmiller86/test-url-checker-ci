@@ -27,12 +27,10 @@ jobs:
       id: setup_vars
       run: |
         set -x
-#        tmp=$(echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed 's/.$//')
         foo=$(ls -1)
         echo $foo
         echo $tmp
         echo "ignore_patterns=foo" >> $GITHUB_OUTPUT
-#        echo "ignore_dirs=$(echo ${{ env.ignore_dirs }} | xargs -n 1 -I'{}' echo \"**/{}/**\" | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
       uses: actions/checkout@v3
