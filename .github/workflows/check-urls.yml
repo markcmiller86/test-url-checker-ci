@@ -26,7 +26,7 @@ jobs:
     - name: Setup variables
       id: setup_vars
       run: |
-	set -x
+        set -x
         tmp=$(echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed 's/.$//')
         echo $tmp
         echo "ignore_patterns=$tmp" >> $GITHUB_OUTPUT
