@@ -27,8 +27,10 @@ jobs:
       id: setup_vars
       run: |
         set -x
-        IFS=$'\n' read -r -d '' -a lines <<< "${{ env.ignore_patterns }}"
-        foo=$(IFS=,; echo "${lines[*]}")
+        foo=$(cat <<EOF
+        ${{ env.ignore_patterns }}
+        EOF
+        )
         echo "$foo"
         echo $tmp
         echo "ignore_patterns=$foo" >> $GITHUB_OUTPUT
