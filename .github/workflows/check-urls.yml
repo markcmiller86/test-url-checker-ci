@@ -51,19 +51,20 @@ jobs:
       with:
         separator: ','
         files: '**.md'
-        files_ignore: |
-          docs/_config.yml
-          **/.github/**
-          **/utils/**
-          **/docs/**
+        files_ignore: ${{ steps.setup_vars.outputs.ignore_dirs }}
 
     - name: Generate list of selected files to URL check 
       id: file_list
       run: |
         if [ "${{ github.event_name }}" = "pull_request" ]; then
-          echo "::set-output name=files::${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "files=${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=files::$(find . -name .git -prune -false -o -name .github -prune -false -o -name utils -prune -false -o -name docs -prune -false -o -name '*.md' | tr '\n' ',')"
+          fcmd=""
+          tmp=$(echo "${{ env.ignore_dirs }}" | tr '\n' ' ' | sed -e 's/  $//')
+          for d in $ignore_dirs; do
+              fcmd="$fcmd -name $d -prune -o "
+          done
+          echo "files=$(find . $fcmd -name '*.md' | tr '\n' ',')" >> $GITHUB_OUTPUT
         fi
 
     - name: Check URLs in selected files
@@ -90,7 +91,6 @@ jobs:
 
         # Operate only on the specific list of files selected above
         include_files: "${{ steps.file_list.outputs.files }}"
-        #include_files: ".src/foo.md"
 
 #
 # Description:
