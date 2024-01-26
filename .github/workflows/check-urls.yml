@@ -27,7 +27,6 @@ jobs:
       id: setup_vars
       run: |
         set -x
-        echo ${{ env.ignore_patterns }} | tr ' ' ','
         foo=$(echo ${{ env.ignore_patterns }} | tr ' ' ',')
         echo "$foo"
 
