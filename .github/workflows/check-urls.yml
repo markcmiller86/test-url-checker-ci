@@ -27,10 +27,10 @@ jobs:
       id: setup_vars
       run: |
         set -x
-        foo=$(ls -1)
+        foo=$(pwd)
         echo $foo
         echo $tmp
-        echo "ignore_patterns=foo" >> $GITHUB_OUTPUT
+        echo "ignore_patterns=$foo" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
       uses: actions/checkout@v3
