@@ -27,10 +27,8 @@ jobs:
       id: setup_vars
       run: |
         set -x
-        foo=$(cat <<EOF
-        ${{ env.ignore_patterns }}
-        EOF
-        )
+        echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed -e 's/,$//'
+        foo=$(echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed -e 's/,$//')
         echo "$foo"
         echo $tmp
         echo "ignore_patterns=$foo" >> $GITHUB_OUTPUT
