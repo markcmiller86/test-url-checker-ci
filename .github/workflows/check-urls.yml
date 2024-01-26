@@ -26,7 +26,7 @@ jobs:
     - name: Setup variables
       id: setup_vars
       run: |
-        echo "ignore_patterns=$(echo ${{ env.ignore_patterns }} | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
+        echo "ignore_patterns=$(echo \"${{ env.ignore_patterns }}\" | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
 #        echo "ignore_dirs=$(echo ${{ env.ignore_dirs }} | xargs -n 1 -I'{}' echo \"**/{}/**\" | tr '\n' ',' | sed 's/.$//')" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
