@@ -26,23 +26,13 @@ jobs:
     - name: Reformat enviornment variables
       id: setup_vars
       run: |
-        set -x
         tmp=$(echo "${{ env.ignore_patterns }}" | tr '\n' ',' | sed -e 's/,,$//')
         echo "ignore_patterns=$tmp" >> $GITHUB_OUTPUT
         tmp=$(echo "${{ env.ignore_dirs }}" | sed -e 's@\(.*\)@"**/\1/**"@' | tr '\n' ',' | sed -e 's@,"\*\*//\*\*",$@@')
         echo "ignore_dirs=$tmp" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
-      uses: actions/checkout@v3
-
-    - name: Debugging Vars
-      id: debug
-      run: |
-        echo "Got here 1"
-        echo "${{ steps.setup_vars.outputs.ignore_patterns }}"
-        echo "Got here 2"
-        echo "${{ steps.setup_vars.outputs.ignore_dirs }}"
-        echo "Got here 3"
+      uses: actions/checkout@v4
 
     - name: Get Changed Files (for PRs)
       if: ${{ github.event_name == 'pull_request' }}
@@ -56,7 +46,6 @@ jobs:
     - name: Generate list of selected files to URL check 
       id: file_list
       run: |
-        set -x
         if [ "${{ github.event_name }}" = "pull_request" ]; then
           echo "files=${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
         else
@@ -99,4 +88,13 @@ jobs:
 # Triggers in one of three ways; 1) manually, 2) scheduled weekly Sunday's 5:17 AM
 # or 3) pull request
 #
+# Stores ignore cases in env. variables and then reformats those (because they have
+# newlines) into a form that can be digested as inputs to other actions.
+#
+# Uses changed-files action in the case of a pull request. Otherwise, uses a find
+# command but builds up the find command to ignore specified directories.
+#
+# From either the changed files of a pull request or a find command, generates a
+# list of files to examine. Eventually, the string variable holding all the file
+# names may get too long.
 #
