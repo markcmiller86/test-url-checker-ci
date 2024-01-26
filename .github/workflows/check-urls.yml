@@ -27,8 +27,9 @@ jobs:
       id: setup_vars
       run: |
         set -x
-        foo=$(pwd)
-        echo $foo
+        IFS=$'\n' read -r -d '' -a lines <<< "${{ env.ignore_patterns }}"
+        foo=$(IFS=,; echo "${lines[*]}")
+        echo "$foo"
         echo $tmp
         echo "ignore_patterns=$foo" >> $GITHUB_OUTPUT
 
