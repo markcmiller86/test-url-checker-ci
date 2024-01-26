@@ -7,7 +7,7 @@ on:
   pull_request:
     branches: [ main ]
 env:
-  ignore_patterns: >
+  ignore_patterns: |
     http://localhost:4000
     https://preview.bssw.io
     https://github.com/<your-github-handle>
@@ -27,7 +27,7 @@ jobs:
       id: setup_vars
       run: |
         set -x
-        tmp=$(echo "${{ env.ignore_patterns }}" | tr ' ' ',')
+        tmp=$(echo "${{ env.ignore_patterns }}" | tr '\n' ',' | sed -e 's/,$//')
         echo "ignore_patterns=$tmp" >> $GITHUB_OUTPUT
         tmp=$(echo "${{ env.ignore_dirs }}" | tr '\n' ',')
         echo "ignore_dirs=$tmp" >> $GITHUB_OUTPUT
