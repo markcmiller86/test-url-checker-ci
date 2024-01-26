@@ -65,7 +65,7 @@ jobs:
           for d in $ignore_dirs; do
               fcmd="$fcmd -name $d -prune -o "
           done
-          echo "files=$(find . $fcmd -name '*.md' | tr '\n' ',')" >> $GITHUB_OUTPUT
+          echo "files=$(find . $fcmd -name '*.md' -print | tr '\n' ',')" >> $GITHUB_OUTPUT
         fi
 
     - name: Check URLs in selected files
