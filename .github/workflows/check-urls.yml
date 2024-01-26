@@ -13,8 +13,9 @@ env:
     https://github.com/<your-github-handle>
   ignore_dirs: |
     .github
-    utils
     docs
+    images
+    utils
   ignore_files: |
     foo
 
