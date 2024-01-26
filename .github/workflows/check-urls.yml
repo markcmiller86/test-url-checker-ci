@@ -29,7 +29,7 @@ jobs:
         set -x
         tmp=$(echo "${{ env.ignore_patterns }}" | tr '\n' ',' | sed -e 's/,,$//')
         echo "ignore_patterns=$tmp" >> $GITHUB_OUTPUT
-        tmp=$(echo "${{ env.ignore_dirs }}" | sed -e 's@\(.*\)@**/\1/**@' | tr '\n' ',' | sed -e 's/,,$//')
+        tmp=$(echo "${{ env.ignore_dirs }}" | sed -e 's@\(.*\)@**/\1/**@' | tr '\n' ',' | sed -e 's@,\*\*//\*\*,$@@')
         echo "ignore_dirs=$tmp" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
