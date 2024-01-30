@@ -42,8 +42,6 @@ jobs:
       uses: tj-actions/changed-files@v42
       with:
         separator: ','
-        files: '**.md'
-        files_ignore: ${{ steps.setup_vars.outputs.ignore_dirs }}
 
     - name: Generate lists of files to check and ignore
       id: file_list
@@ -53,6 +51,7 @@ jobs:
           echo "ignore_dirs=" >> $GITHUB_OUTPUT
         else
           echo "files=" >> $GITHUB_OUTPUT
+          echo "ignore_dirs= ${{ steps.setup_vars.outputs.ignore_dirs }}" >> $GITHUB_OUTPUT
         fi
 
     - name: Check URLs in selected files
