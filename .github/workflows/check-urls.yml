@@ -80,7 +80,7 @@ jobs:
         exclude_files: "${{ steps.file_list.outputs.ignore_dirs }}"
 
         # Operate only on the specific list of files selected above
-        include_files: 
+        include_files: "${{ steps.file_list.outputs.files }}"
 
 #
 # Description:
