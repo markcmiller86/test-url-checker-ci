@@ -78,7 +78,7 @@ jobs:
         exclude_patterns: ${{ steps.setup_vars.outputs.ignore_patterns }}
 
         # Exclude these dirs and files
-        exclude_files: src/
+        exclude_files: src/,.github/,utils/,docs/
 
         # Operate only on the specific list of files selected above
         include_files: "${{ steps.file_list.outputs.files }}"
