@@ -78,10 +78,10 @@ jobs:
         exclude_patterns: ${{ steps.setup_vars.outputs.ignore_patterns }}
 
         # Exclude these dirs and files
-        exclude_files: src/,Events/
+        exclude_files: src/,Events/,docs/,images/,.github/
 
         # Operate only on the specific list of files selected above
-        #include_files: "${{ steps.file_list.outputs.files }}"
+        include_files: "${{ steps.file_list.outputs.files }}"
 
 #
 # Description:
