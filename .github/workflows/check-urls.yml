@@ -28,6 +28,7 @@ jobs:
     - name: Reformat environment variables
       id: setup_vars
       run: |
+        set -x
         tmp=$(echo "${{ env.ignore_patterns }}" | tr '\n' ',' | sed -e 's/,,$//')
         echo "ignore_patterns=$tmp" >> $GITHUB_OUTPUT
         tmp=$(echo "${{ env.ignore_dirs }}" | sed -e 's@\(.*\)@"\1/"@' | tr '\n' ',' | sed -e 's@/,$@@')
