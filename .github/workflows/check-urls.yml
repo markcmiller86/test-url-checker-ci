@@ -12,6 +12,7 @@ env:
     https://preview.bssw.io
     https://github.com/<your-github-handle>
   ignore_dirs: |
+    .foo
     docs
     images
     utils
