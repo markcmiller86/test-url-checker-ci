@@ -85,20 +85,22 @@ jobs:
 # Triggers in one of three ways; 1) manually, 2) scheduled weekly Sunday's 5:17 AM
 # or 3) pull request
 #
-# Stores ignore cases in env. variables and then reformats those (because they have
-# newlines) into a comma-separated single line string that can be digested as
-# inputs to other actions.
+# Stores ignore pattern cases in env. variables and then reformats those (because
+# they have newlines) into a comma-separated single line string that can be digested
+# as inputs to other actions.
 #
-# Uses changed-files action in the case of a pull request. Otherwise, uses a find
-# command but builds up the find command to ignore specified directories.
+# For PRs, uses changed-files action to get list of changed files and passes this
+# to urlchecker via `include_files param. Also, ignore file patterns is set to 
+# empty string for PRs because we think URLs anywhere in PRs should be checked.
 #
-# From either the changed files of a pull request or a find command, generates a
-# list of files to examine. Eventually, the string variable holding all the file
-# names may get too long.
+# For scheduled or manual triggers, uses fact that empty `include_files` param
+# causes urlchecker to process *all* files that match in `file_type` param but do
+# not match any `exclude_files` patterns. These file patterns for exclude work
+# more or less like file globs. So, specifying the initial part of the string
+# for a file (path) name is sufficient to ignore the file.
 #
-# We include Events in dirs to ignore because of all content we host, I suspect
-# Event URLs are the most likely to go stale rather quickly **and** because
+# We include Events in file patterns to ignore because of all content we host,
+# we suspect Event URLs are the most likely to go stale rather quickly **and** because
 # the URL validness is important only during the short window prior to the event.
-# That said, we don't want to ignore Events in PRs.
+# That said, we don't want to ignore Events in PRs and we do not as per above.
 #
-
