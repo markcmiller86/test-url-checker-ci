@@ -11,14 +11,11 @@ env:
     http://localhost:4000
     https://preview.bssw.io
     https://github.com/<your-github-handle>
-  ignore_dirs: |
-    .foo
-    docs
-    images
-    utils
-    Events
-  ignore_files: |
-    foo
+  ignore_patterns: |
+    docs/
+    images/
+    utils/
+    Events/
 
 jobs:
   check-urls:
@@ -28,11 +25,10 @@ jobs:
     - name: Reformat environment variables
       id: setup_vars
       run: |
-        set -x
         tmp=$(echo "${{ env.ignore_patterns }}" | tr '\n' ',' | sed -e 's/,,$//')
         echo "ignore_patterns=$tmp" >> $GITHUB_OUTPUT
-        tmp=$(echo "${{ env.ignore_dirs }}" | sed -e 's@\(.*\)@"\1/"@' | tr '\n' ',' | sed -e 's@,"/",$@@')
-        echo "ignore_dirs=$tmp" >> $GITHUB_OUTPUT
+        tmp=$(echo "${{ env.ignore_patterns }}" | tr '\n' ',' | sed -e 's/,,$//')
+        echo "ignore_patterns=$tmp" >> $GITHUB_OUTPUT
 
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -49,10 +45,10 @@ jobs:
       run: |
         if [ "${{ github.event_name }}" = "pull_request" ]; then
           echo "files=${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
-          echo "ignore_dirs=" >> $GITHUB_OUTPUT
+          echo "ignore_patterns=" >> $GITHUB_OUTPUT
         else
           echo "files=" >> $GITHUB_OUTPUT
-          echo "ignore_dirs= ${{ steps.setup_vars.outputs.ignore_dirs }}" >> $GITHUB_OUTPUT
+          echo "ignore_patterns= ${{ steps.setup_vars.outputs.ignore_patterns }}" >> $GITHUB_OUTPUT
         fi
 
     - name: Check URLs in selected files
@@ -78,7 +74,7 @@ jobs:
         exclude_patterns: ${{ steps.setup_vars.outputs.ignore_patterns }}
 
         # Exclude these dirs and files
-        exclude_files: "${{ steps.file_list.outputs.ignore_dirs }}"
+        exclude_files: "${{ steps.file_list.outputs.ignore_patterns }}"
 
         # Operate only on the specific list of files selected above
         include_files: "${{ steps.file_list.outputs.files }}"
